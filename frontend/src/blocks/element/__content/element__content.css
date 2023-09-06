@@ -1,0 +1,6 @@
+ .element__content {
+   display: flex;
+   justify-content: space-between;
+   padding: 17px 21px 20px;
+   max-height: 79px;
+ }

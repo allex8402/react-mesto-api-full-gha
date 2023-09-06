@@ -1,0 +1,19 @@
+ .element__hart {
+   background-image: url(../../../images/Vector_hart.svg);
+   width: 22px;
+   height: 19px;
+   /* margin: 5px 5px 0 0; */
+   cursor: pointer;
+   border: none;
+   background-size: contain;
+   background-repeat: no-repeat;
+   background-color: transparent;
+ }
+
+ .element__hart:hover {
+   opacity: 0.5;
+ }
+
+ .element__hart_active {
+   background-image: url(../../../images/hart_black.svg);
+ }
