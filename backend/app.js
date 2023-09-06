@@ -21,6 +21,8 @@ mongoose.connect(DB_URL, {
 
 app.use(helmet());
 
+app.use(corsMiddleware);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -57,16 +59,15 @@ app.use(auth);
 app.use('/users', require('./routes/users'));
 app.use('/cards', require('./routes/cards'));
 
-app.use(errorLogger); // Подключаем логгер ошибок после обработчиков роутов и до обработчиков ошибок
-app.use(errors());
-
 app.use('*', (req, res, next) => {
   const error = new NotFoundError('Запрашиваемый ресурс не найден');
   next(error);
 });
 
+app.use(errorLogger); // Подключаем логгер ошибок после обработчиков роутов и до обработчиков ошибок
+app.use(errors());
+
 app.use(errorHandler);
-app.use(corsMiddleware);
 
 // Запускаем сервер на заданном порту
 app.listen(PORT, () => {
