@@ -1,4 +1,4 @@
-const path = require('path');
+// const path = require('path');
 const express = require('express');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
@@ -11,24 +11,20 @@ const auth = require('./middlewares/auth');
 const errorHandler = require('./middlewares/error-handler');
 const NotFoundError = require('./errors/NotFoundError');
 const urlRegex = require('./utils/regex');
-const corsMiddleware = require('./middlewares/cors'); // Подключаем мидлвару для обработки CORS
+const cors = require('./middlewares/cors'); // Подключаем мидлвару для обработки CORS
 
 const app = express();
 
 mongoose.connect(DB_URL, {
   useNewUrlParser: true,
 });
-
+app.use(cors);
 app.use(helmet());
-
-app.use(corsMiddleware);
-
+app.use(requestLogger); // Подключаем логгер запросов
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(express.static(path.join(__dirname, 'build')));
-
-app.use(requestLogger); // Подключаем логгер запросов
+// app.use(express.static(path.join(__dirname, 'build')));
 
 app.get('/crash-test', () => {
   setTimeout(() => {
