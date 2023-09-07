@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
 const { celebrate, Joi, errors } = require('celebrate');
+const cors = require('cors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000, DB_URL = 'mongodb://127.0.0.1:27017/mestodb' } = process.env;
@@ -11,14 +12,30 @@ const auth = require('./middlewares/auth');
 const errorHandler = require('./middlewares/error-handler');
 const NotFoundError = require('./errors/NotFoundError');
 const urlRegex = require('./utils/regex');
-const cors = require('./middlewares/cors'); // Подключаем мидлвару для обработки CORS
 
 const app = express();
 
 mongoose.connect(DB_URL, {
   useNewUrlParser: true,
 });
-app.use(cors);
+const allowedOrigins = [
+  'https://allexkate.nomoredomainsicu.ru',
+  'https://api.allexkate.nomoredomainsicu.ru',
+  'http://allexkate.nomoredomainsicu.ru',
+  'http://api.allexkate.nomoredomainsicu.ru',
+  'localhost:3000',
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+}));
+
 app.use(helmet());
 app.use(requestLogger); // Подключаем логгер запросов
 app.use(express.json());
