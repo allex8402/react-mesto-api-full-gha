@@ -6,7 +6,7 @@ function handleResponse(res) {
     return Promise.reject(res.status);
 }
 // базовый URL
-export const BASE_URL = "https://auth.nomoreparties.co";
+export const BASE_URL = "https://api.allexkate.nomoredomainsicu.ru";
 
 // регистрация в сервисе
 export function registerUser(email, password) {
