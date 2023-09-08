@@ -31,10 +31,11 @@ export function loginUser(email, password) {
 // запрос проверки валидности и получения email
 export function getToken(jwt) {
     return fetch(`${BASE_URL}/users/me`, {
-        method: "GET",
+        method: 'GET',
         headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${jwt}`,
-        },
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${jwt}`
+        }
     }).then(handleResponse);
 }
