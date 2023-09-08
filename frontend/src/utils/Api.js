@@ -108,7 +108,7 @@ export class Api {
 const api = new Api({
   baseUrl: 'https://api.allexkate.nomoredomainsicu.ru',
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'text/plain'
   }
 });
 
