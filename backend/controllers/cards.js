@@ -26,8 +26,6 @@ const createCard = (req, res, next) => {
         } else {
           next(new ValidationError('Переданы некорректные данные'));
         }
-      } else if (error.name === 'NotFoundError') {
-        next(new NotFoundError('Запрашиваемый пользователь не найден'));
       } else {
         next(error);
       }
@@ -37,25 +35,28 @@ const createCard = (req, res, next) => {
 // Удаление карточки
 const deleteCard = (req, res, next) => {
   const { cardId } = req.params;
+
   // Поиск карточки
   Card.findById(cardId)
     .orFail(new NotFoundError('Карточки нет в БД'))
     .then((card) => {
       // Проверка, принадлежит ли карточка текущему пользователю
       if (card.owner.toString() !== req.user._id.toString()) {
-        return next(new AccessDeniedError('Недостаточно прав для удаления чужой карточки'));
+        next(new AccessDeniedError('Недостаточно прав для удаления чужой карточки'));
+        return;
       }
       // Удаление карточки
-      return Card.deleteOne({ _id: cardId })
+      Card.deleteOne({ _id: cardId })
         .then(() => res.status(200).send({ message: 'Карточка удалена' }))
         .catch((error) => {
           if (error.name === 'CastError') {
-            throw new NotFoundError('Запрашиваемый ресурс не найден');
+            next(new NotFoundError('Запрашиваемый ресурс не найден'));
+          } else {
+            next(error);
           }
-          next(error);
         });
     })
-    .catch(next);
+    .catch((error) => next(error)); // Обработайте ошибку явно в этом catch
 };
 
 // Поставить лайк
@@ -69,10 +70,8 @@ const likeCard = (req, res, next) => {
       res.status(200).send(updatedCard);
     })
     .catch((error) => {
-      if (error.name === 'ValidationError') {
-        next(new ValidationError('Переданы некорректные данные'));
-      } else if (error.name === 'CastError') {
-        next(new NotFoundError('Запрашиваемый ресурс не найден'));
+      if (error.name === 'CastError') {
+        next(new NotFoundError('Карточка не найдена'));
       } else {
         next(error);
       }
@@ -90,10 +89,8 @@ const dislikeCard = (req, res, next) => {
       res.status(200).send(updatedCard);
     })
     .catch((error) => {
-      if (error.name === 'ValidationError') {
-        next(new ValidationError('Переданы некорректные данные'));
-      } else if (error.name === 'CastError') {
-        next(new NotFoundError('Запрашиваемый ресурс не найден'));
+      if (error.name === 'CastError') {
+        next(new NotFoundError('Карточка не найдена'));
       } else {
         next(error);
       }

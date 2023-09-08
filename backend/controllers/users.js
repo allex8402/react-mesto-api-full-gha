@@ -24,10 +24,10 @@ const getUserInfo = (req, res, next) => {
   const { _id } = req.user;
 
   User.findById(_id)
-    .orFail()
+    .orFail(new Error('User not found')) // Здесь можно использовать любое сообщение об ошибке
     .then((user) => res.status(200).send(user))
     .catch((error) => {
-      if (error.name === 'NotFoundError') {
+      if (error.message === 'User not found') {
         next(new NotFoundError('Запрашиваемый пользователь не найден'));
       } else {
         next(error);
@@ -45,8 +45,6 @@ const getUserById = (req, res, next) => {
     .catch((error) => {
       if (error.name === 'ValidationError') {
         next(new ValidationError('Переданы некорректные данные при получении пользователя'));
-      } else if (error.name === 'NotFoundError') {
-        next(new NotFoundError('Запрашиваемый пользователь не найден'));
       } else {
         next(error);
       }
@@ -91,13 +89,11 @@ const updateProfile = (req, res, next) => {
   const userId = req.user._id;
 
   User.findByIdAndUpdate(userId, { name, about }, { new: true, runValidators: true })
-    .orFail()
+    .orFail() // Если запись не найдена, будет выброшена ошибка по умолчанию
     .then((user) => res.status(200).send(user))
     .catch((error) => {
       if (error.name === 'ValidationError') {
         next(new ValidationError('Переданы некорректные данные при обновлении пользователя'));
-      } else if (error.name === 'NotFoundError') {
-        next(new NotFoundError('Запрашиваемый пользователь не найден'));
       } else {
         next(error);
       }
@@ -114,13 +110,7 @@ const updateAvatar = (req, res, next) => {
       res.status(200).send(user);
     })
     .catch((error) => {
-      if (error.name === 'ValidationError') {
-        if (error.errors && error.errors.avatar) {
-          next(new ValidationError('Некорректный URL для аватара'));
-        } else {
-          next(new ValidationError('Переданы некорректные данные при обновлении аватара'));
-        }
-      } else if (error.name === 'NotFoundError') {
+      if (error.name === 'NotFoundError') {
         next(new NotFoundError('Запрашиваемый пользователь не найден'));
       } else {
         next(error);

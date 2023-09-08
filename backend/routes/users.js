@@ -13,7 +13,7 @@ const updateProfileSchema = Joi.object({
   about: Joi.string().min(2).max(30).required(),
 });
 const updateAvatarSchema = Joi.object({
-  avatar: Joi.string().pattern(urlRegex),
+  avatar: Joi.string().pattern(urlRegex).required(),
 });
 
 usersRouter.get('/', getUsers);
@@ -22,7 +22,7 @@ usersRouter.get('/me', getUserInfo);
 
 usersRouter.get('/:userId', celebrate({
   [Segments.PARAMS]: Joi.object().keys({
-    userId: Joi.string().hex().required(),
+    userId: Joi.string().hex().length(24).required(),
   }),
 }), getUserById);
 
