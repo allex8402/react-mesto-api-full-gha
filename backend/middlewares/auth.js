@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+console.log(process.env.JWT_SECRET);
 const jwt = require('jsonwebtoken');
 const UnauthorizedError = require('../errors/UnauthorizedError');
 
