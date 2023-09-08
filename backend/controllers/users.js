@@ -8,6 +8,8 @@ const ConflictError = require('../errors/ConflictError');
 const UnauthorizedError = require('../errors/UnauthorizedError');
 const NotFoundError = require('../errors/NotFoundError');
 
+const { JWT_SECRET } = process.env;
+
 // Возвращает всех пользователей
 const getUsers = (req, res, next) => {
   User.find({})
@@ -136,7 +138,7 @@ const login = (req, res, next) => {
           if (!matched) {
             throw new UnauthorizedError('Неправильные почта или пароль');
           }
-          const token = jwt.sign({ _id: user._id }, 'some-sekret-key', { expiresIn: '7d' });
+          const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '7d' });
 
           res.status(200).send({ token }); // отправляем токен в теле ответа
         });
