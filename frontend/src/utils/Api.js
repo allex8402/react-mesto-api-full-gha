@@ -96,7 +96,7 @@ export class Api {
   }
   // новый изменение статуса
   changeLikeCardStatus(id, isLiked) {
-    return isLiked ? this._deleteLikeCard(id) : this._addLikeCard(id)
+    return isLiked ? api.deleteLikeCard(id) : api.addLikeCard(id)
   }
 
 
