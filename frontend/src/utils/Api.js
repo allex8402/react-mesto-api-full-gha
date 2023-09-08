@@ -12,10 +12,10 @@ export class Api {
   }
 
   _getHeaders() {
-    const token = localStorage.getItem('token');
+    const jwt = localStorage.getItem('jwt');
 
     return {
-      'Authorization': `Bearer ${token}`,
+      'Authorization': `Bearer ${jwt}`,
       ...this._headers,
     };
   }
