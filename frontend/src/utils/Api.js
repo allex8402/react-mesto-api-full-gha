@@ -1,7 +1,7 @@
 export class Api {
   constructor(options) {
-    this.baseUrl = options.baseUrl;
-    this.headers = options.headers;
+    this._baseUrl = options.baseUrl;
+    this._headers = options.headers;
   }
 
   _handleResponse(res) {
@@ -22,14 +22,14 @@ export class Api {
 
   //загрузка информации о пользователе с сервера
   getUserInfo() {
-    return fetch(`${this.baseUrl}/users/me`, {
+    return fetch(`${this._baseUrl}/users/me`, {
       headers: this._getHeaders(),
     })
       .then(res => this._handleResponse(res))
   }
   //Получить карточки
   getInitialCards() {
-    return fetch(`${this.baseUrl}/cards`, {
+    return fetch(`${this._baseUrl}/cards`, {
       headers: this._getHeaders(),
     })
       .then(res => this._handleResponse(res))
@@ -37,7 +37,7 @@ export class Api {
 
   // Редактирование профиля
   editProfile(data) {
-    return fetch(`${this.baseUrl}/users/me`, {
+    return fetch(`${this._baseUrl}/users/me`, {
       method: 'PATCH',
       headers: this._getHeaders(),
       body: JSON.stringify({
@@ -49,7 +49,7 @@ export class Api {
   }
   // новая карточка
   addNewCard(data) {
-    return fetch(`${this.baseUrl}/cards`, {
+    return fetch(`${this._baseUrl}/cards`, {
       method: 'POST',
       headers: this._getHeaders(),
       body: JSON.stringify({
@@ -61,7 +61,7 @@ export class Api {
   }
   // обновление аватара
   editAvatar(data) {
-    return fetch(`${this.baseUrl}/users/me/avatar`, {
+    return fetch(`${this._baseUrl}/users/me/avatar`, {
       method: 'PATCH',
       headers: this._getHeaders(),
       body: JSON.stringify({
@@ -72,7 +72,7 @@ export class Api {
   }
   // удаление карточки
   deleteCard(id) {
-    return fetch(`${this.baseUrl}/cards/${id}`, {
+    return fetch(`${this._baseUrl}/cards/${id}`, {
       method: 'DELETE',
       headers: this._getHeaders(),
     })
@@ -80,7 +80,7 @@ export class Api {
   }
   // поставить лайк
   addLikeCard(id) {
-    return fetch(`${this.baseUrl}/cards/${id}/likes`, {
+    return fetch(`${this._baseUrl}/cards/${id}/likes`, {
       method: 'PUT',
       headers: this._getHeaders(),
     })
@@ -88,7 +88,7 @@ export class Api {
   }
   // удалить лайк
   deleteLikeCard(id) {
-    return fetch(`${this.baseUrl}/cards/${id}/likes`, {
+    return fetch(`${this._baseUrl}/cards/${id}/likes`, {
       method: 'DELETE',
       headers: this._getHeaders(),
     })
@@ -108,7 +108,7 @@ export class Api {
 const api = new Api({
   baseUrl: 'https://api.allexkate.nomoredomainsicu.ru',
   headers: {
-    'Content-Type': 'text/plain'
+    'Content-Type': 'application/json'
   }
 });
 
