@@ -170,8 +170,9 @@ function App() {
     const jwt = localStorage.getItem("jwt");
     if (jwt) {
       auth.getToken(jwt).then((res) => {
-        if (res) {
+        if (res.data) {
           setIsLoggedIn(true);
+          console.log(res.data.email)
           setEmailName(res.data.email);
         }
       }).catch((err) => {
@@ -179,6 +180,7 @@ function App() {
       });
     }
   }, []);
+
 
   React.useEffect(() => {
     if (isLoggedIn === true) {
