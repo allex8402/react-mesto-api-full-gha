@@ -190,17 +190,18 @@ function App() {
 
   // Получение данных пользователя и начальных карточек при загрузке компонента
   React.useEffect(() => {
-    if (isLoggedIn === true) {
-      Promise.all([api.getUserInfo(), api.getInitialCards()])
-        .then(([userData, initialCards]) => {
-          setCurrentUser(userData);
-          setCards(initialCards);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
+    // if (isLoggedIn === true) {
+    Promise.all([api.getUserInfo(), api.getInitialCards()])
+      .then(([userData, initialCards]) => {
+        setCurrentUser(userData);
+        setCards(initialCards);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
+  // }, 
+
 
   function handleInfoTooltip() {
     setInfoTooltip(true);
