@@ -97,8 +97,9 @@ export class Api {
 }  //закрытие класса
 
 const api = new Api({
-  baseUrl: 'https://api.allexkate.nomoredomainsicu.ru',
+  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-66',
   headers: {
+    authorization: 'ea1a8b8d-6317-47fd-a20b-0ce7b90a2f01',
     'Content-Type': 'application/json'
   }
 });
