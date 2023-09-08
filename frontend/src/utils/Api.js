@@ -21,7 +21,7 @@ export class Api {
   //Получить карточки
   getInitialCards() {
     return fetch(`${this.baseUrl}/cards`, {
-      headers: this.headers
+      headers: this.headers,
     })
       .then(res => this._handleResponse(res))
   }
