@@ -9,7 +9,7 @@
 
 ## Ссылки на проект
 
-IP-адрес <158.160.69.37>
+IP-адрес  IP 158.160.69.37
 
 Frontend https://allexkate.nomoredomainsicu.ru/
 
