@@ -16,7 +16,7 @@ export class Api {
 
     return {
       'Authorization': `Bearer ${jwt}`,
-      ...this._headers,
+      ...this.headers,
     };
   }
 
