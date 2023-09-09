@@ -208,7 +208,7 @@ function App() {
   }
 
   function onSignOut() {
-    setCurrentUser(null);
+    setCurrentUser('');
     setIsLoggedIn(false);
     setEmailName(null);
     navigate("/sign-in");
