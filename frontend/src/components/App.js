@@ -30,7 +30,7 @@ function App() {
   const [cards, setCards] = React.useState([]);
   const [removeCard, setRemoveCard] = React.useState('');
   const navigate = useNavigate();
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(null);
   const [emailName, setEmailName] = React.useState(null);
   const [popupImage, setPopupImage] = React.useState("");
   const [popupTitle, setPopupTitle] = React.useState("");
