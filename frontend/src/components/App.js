@@ -72,16 +72,15 @@ function App() {
     setInfoTooltip(false);
   }
 
-  // Обработчик лайка карточки
   function handleCardLike(card) {
-    // Снова проверяем, есть ли уже лайк на этой карточке
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
-
-    // Отправляем запрос в API и получаем обновлённые данные карточки
+    // Отправляем запрос в API и меняем статус лайка на основе isLiked
     api
-      .changeLikeCardStatus(card._id, !isLiked)
+      .changeLikeCardStatus(card._id, !card.isLiked)
       .then((newCard) => {
-        setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
+        // Обновляем карточки в состоянии приложения
+        setCards((state) =>
+          state.map((c) => (c._id === card._id ? newCard : c))
+        );
       })
       .catch((err) => console.log(err));
   }
