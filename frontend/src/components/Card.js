@@ -13,7 +13,7 @@ function Card({ card, onCardClick, onCardLike, onDeletePopup }) {
     }
 
     function handleLikeClick() {
-        onCardLike(card);
+        onCardLike(card, isLiked);
     }
 
     function handleDeleteClick() {
