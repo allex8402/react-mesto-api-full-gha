@@ -187,10 +187,20 @@ function App() {
     }
   }, [isLoggedIn, navigate]);
 
+
+  React.useEffect(() => {
+    if (!isLoggedIn) {
+      if (localStorage.getItem('jwt')) {
+        const jwt = localStorage.getItem('jwt');
+        auth(jwt);
+      }
+    }
+  }, [isLoggedIn]);
+
   // Получение данных пользователя и начальных карточек при загрузке компонента (добавили массив зависимости )
   React.useEffect(() => {
     if (isLoggedIn === true) {
-      Promise.all([api.getUserInfo(localStorage.jwt), api.getInitialCards(localStorage.jwt)])
+      Promise.all([api.getUserInfo(), api.getInitialCards()])
         .then(([userData, initialCards]) => {
           setCurrentUser(userData);
           setCards(initialCards);
