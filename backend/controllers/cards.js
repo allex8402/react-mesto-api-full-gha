@@ -5,7 +5,7 @@ const AccessDeniedError = require('../errors/AccessDeniedError');
 
 // Получение всех карточек
 const getCards = (req, res, next) => {
-  Card.find({})
+  Card.find({}).sort({ createdAt: -1 })
     .then((cards) => res.status(200).send(cards))
     .catch((err) => next(err));
 };
@@ -56,7 +56,7 @@ const deleteCard = (req, res, next) => {
           }
         });
     })
-    .catch((error) => next(error)); // Обработайте ошибку явно в этом catch
+    .catch((error) => next(error));
 };
 
 // Поставить лайк
@@ -71,7 +71,7 @@ const likeCard = (req, res, next) => {
     })
     .catch((error) => {
       if (error.name === 'CastError') {
-        next(new NotFoundError('Карточка не найдена'));
+        next(new ValidationError('Переданные данные не корректны'));
       } else {
         next(error);
       }
@@ -90,7 +90,7 @@ const dislikeCard = (req, res, next) => {
     })
     .catch((error) => {
       if (error.name === 'CastError') {
-        next(new NotFoundError('Карточка не найдена'));
+        next(new ValidationError('Переданные данные не корректны'));
       } else {
         next(error);
       }

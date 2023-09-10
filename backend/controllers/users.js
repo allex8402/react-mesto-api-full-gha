@@ -10,7 +10,7 @@ const ConflictError = require('../errors/ConflictError');
 const UnauthorizedError = require('../errors/UnauthorizedError');
 const NotFoundError = require('../errors/NotFoundError');
 
-const { JWT_SECRET } = process.env;
+const { NODE_ENV, JWT_SECRET } = process.env;
 
 // Возвращает всех пользователей
 const getUsers = (req, res, next) => {
@@ -24,7 +24,7 @@ const getUserInfo = (req, res, next) => {
   const { _id } = req.user;
 
   User.findById(_id)
-    .orFail(new Error('User not found')) // Здесь можно использовать любое сообщение об ошибке
+    .orFail(new NotFoundError('Пользователь не найден'))
     .then((user) => res.status(200).send(user))
     .catch((error) => {
       if (error.message === 'User not found') {
@@ -89,7 +89,7 @@ const updateProfile = (req, res, next) => {
   const userId = req.user._id;
 
   User.findByIdAndUpdate(userId, { name, about }, { new: true, runValidators: true })
-    .orFail() // Если запись не найдена, будет выброшена ошибка по умолчанию
+    .orFail(new NotFoundError('Пользователь не найден')) // Если запись не найдена, будет выброшена ошибка по умолчанию
     .then((user) => res.status(200).send(user))
     .catch((error) => {
       if (error.name === 'ValidationError') {
@@ -110,8 +110,8 @@ const updateAvatar = (req, res, next) => {
       res.status(200).send(user);
     })
     .catch((error) => {
-      if (error.name === 'NotFoundError') {
-        next(new NotFoundError('Запрашиваемый пользователь не найден'));
+      if (error.name === 'ValidationError') {
+        next(ValidationError('Переданы некорректные данные'));
       } else {
         next(error);
       }
@@ -130,7 +130,7 @@ const login = (req, res, next) => {
           if (!matched) {
             throw new UnauthorizedError('Неправильные почта или пароль');
           }
-          const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '7d' });
+          const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'some-sekret-key', { expiresIn: '7d' });
           res.status(200).send({ token }); // отправляем токен в теле ответа
         });
     })
