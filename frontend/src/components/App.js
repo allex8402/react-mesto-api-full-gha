@@ -170,6 +170,7 @@ function App() {
     const jwt = localStorage.getItem("jwt");
     if (jwt) {
       auth.getToken(jwt).then((res) => {
+        console.log(res, res.data, res.data.email)
         if (res.data) {
           setIsLoggedIn(true);
           setEmailName(res.data.email);
