@@ -188,19 +188,19 @@ function App() {
     }
   }, [isLoggedIn, navigate]);
 
-  // Получение данных пользователя и начальных карточек при загрузке компонента
+  // Получение данных пользователя и начальных карточек при загрузке компонента (добавили массив зависимости )
   React.useEffect(() => {
-    // if (isLoggedIn === true) {
-    Promise.all([api.getUserInfo(), api.getInitialCards()])
-      .then(([userData, initialCards]) => {
-        setCurrentUser(userData);
-        setCards(initialCards);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
-  // }, 
+    if (isLoggedIn === true) {
+      Promise.all([api.getUserInfo(), api.getInitialCards()])
+        .then(([userData, initialCards]) => {
+          setCurrentUser(userData);
+          setCards(initialCards);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, [isLoggedIn]);
 
 
   function handleInfoTooltip() {
