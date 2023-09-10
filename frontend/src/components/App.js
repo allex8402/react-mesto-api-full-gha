@@ -172,7 +172,6 @@ function App() {
       auth.getToken(jwt).then((res) => {
         if (res.data) {
           setIsLoggedIn(true);
-          console.log(res.data.email)
           setEmailName(res.data.email);
         }
       }).catch((err) => {
@@ -191,7 +190,7 @@ function App() {
   // Получение данных пользователя и начальных карточек при загрузке компонента (добавили массив зависимости )
   React.useEffect(() => {
     if (isLoggedIn === true) {
-      Promise.all([api.getUserInfo(), api.getInitialCards()])
+      Promise.all([api.getUserInfo(localStorage.jwt), api.getInitialCards(localStorage.jwt)])
         .then(([userData, initialCards]) => {
           setCurrentUser(userData);
           setCards(initialCards);
