@@ -192,7 +192,7 @@ function App() {
     if (!isLoggedIn) {
       if (localStorage.getItem('jwt')) {
         const jwt = localStorage.getItem('jwt');
-        auth(jwt);
+        onLogin(jwt);
       }
     }
   }, [isLoggedIn]);
