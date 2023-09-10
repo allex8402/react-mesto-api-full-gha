@@ -152,36 +152,40 @@ function App() {
       setPopupTitle("Что-то пошло не так! Попробуйте ещё раз.");
     }).finally(handleInfoTooltip);
   }
-  // авторизация
   function onLogin(email, password) {
-    auth.loginUser(email, password).then((res) => {
-      localStorage.setItem("jwt", res.token);
-      setIsLoggedIn(true);
-      setEmailName(email);
-      navigate("/");
-    }).catch(() => {
-      setPopupImage(fail);
-      setPopupTitle("Что-то пошло не так! Попробуйте ещё раз.");
-      handleInfoTooltip();
-    });
+    auth.loginUser(email, password)
+      .then((res) => {
+        localStorage.setItem("jwt", res.token);
+        checkAndSetLoggedInStatus();
+        navigate("/");
+      })
+      .catch(() => {
+        setPopupImage(fail);
+        setPopupTitle("Что-то пошло не так! Попробуйте ещё раз.");
+        handleInfoTooltip();
+      });
   }
 
   React.useEffect(() => {
-    const jwt = localStorage.getItem("jwt");
-    if (jwt) {
-      auth.getToken(jwt).then((res) => {
-        console.log(res, res.data, res.data.email)
-        if (res.data) {
-          setIsLoggedIn(true);
-          setEmailName(res.data.email);
-        }
-      }).catch((err) => {
-        console.error(err);
-      });
-    }
+    checkAndSetLoggedInStatus();
   }, []);
 
-
+  function checkAndSetLoggedInStatus() {
+    const jwt = localStorage.getItem("jwt");
+    if (jwt) {
+      auth.getToken(jwt)
+        .then((res) => {
+          console.log(res, res.data, res.data.email);
+          if (res.data) {
+            setIsLoggedIn(true);
+            setEmailName(res.data.email);
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }
   React.useEffect(() => {
     if (isLoggedIn === true) {
       navigate("/");
