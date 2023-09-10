@@ -188,15 +188,6 @@ function App() {
   }, [isLoggedIn, navigate]);
 
 
-  React.useEffect(() => {
-    if (!isLoggedIn) {
-      if (localStorage.getItem('jwt')) {
-        const jwt = localStorage.getItem('jwt');
-        onLogin(jwt);
-      }
-    }
-  }, [isLoggedIn]);
-
   // Получение данных пользователя и начальных карточек при загрузке компонента (добавили массив зависимости )
   React.useEffect(() => {
     if (isLoggedIn === true) {
