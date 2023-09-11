@@ -26,13 +26,7 @@ const getUserInfo = (req, res, next) => {
   User.findById(_id)
     .orFail(new NotFoundError('Пользователь не найден'))
     .then((user) => res.status(200).send(user))
-    .catch((error) => {
-      if (error.message === 'User not found') {
-        next(new NotFoundError('Запрашиваемый пользователь не найден'));
-      } else {
-        next(error);
-      }
-    });
+    .catch(next);
 };
 
 // Возвращает пользователя по _id
@@ -105,13 +99,13 @@ const updateAvatar = (req, res, next) => {
   const { avatar } = req.body;
 
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
-    .orFail()
+    .orFail(new NotFoundError('Пользователь не найден')) // Обработка ошибки orFail
     .then((user) => {
       res.status(200).send(user);
     })
     .catch((error) => {
       if (error.name === 'ValidationError') {
-        next(ValidationError('Переданы некорректные данные'));
+        next(new ValidationError('Переданы некорректные данные при обновлении аватара'));
       } else {
         next(error);
       }
